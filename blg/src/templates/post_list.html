@@ -1,14 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-		<h1>{{ title }} is working</h1>
+<div class="col-sm-6 offset-sm-3">
+		<h1>{{ title }}</h1>
 
 			{% for obj in object_list %}
-				{{ obj.id }}</br>
-				<a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></br>
-				{{ obj.content }}</br>
-				{{ obj.updated }}</br>
-				{{ obj.timestamp }}</br>
-				</br>
+		<div class="row">
+			<div class="col-sm-6">
+
+				<div class="thumbnail">
+					{% if obj.image %}
+					<img src="{{ obj.image.url }}" class="img-responsive" width="285px" height="250px">
+					{% endif %}
+				  <div class="card-body">
+				    <h5 class="card-title"><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a> 
+				    	<small>{{ obj.timestamp }} ago</small></h5>
+				    <p class="card-text">{{ obj.content | linebreaks | truncatechars:100 }}</p>
+				    <a href="{{ obj.get_absolute_url }}" class="btn btn-primary">View</a>
+				  </div>
+				</div>
+			</div>
+			<hr>
+	</div>
+			
 			{% endfor %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?{{ page_request_var }}={{ object_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?{{ page_request_var }}={{ object_list.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+
+</div>
 {% endblock %}
